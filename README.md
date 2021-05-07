@@ -1,0 +1,1 @@
+# GGA_MSSM_SQCD
