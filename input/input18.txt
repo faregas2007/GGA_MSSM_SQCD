@@ -1,0 +1,24 @@
+Block REAL
+	1	1000.000000000000	#mu
+	2	2850.4244301314	#Aq
+	3	1.545801533175977	#beta
+	4	0.	#squark_mixing_angle
+	5	0.62759305593007	#a
+	6	-0.77854155711070	#b
+Block MASS
+	1	2500.00000000000	#mA
+	2	172.500000000000	#mquark
+	3	138.407769901930	#mquark_running
+	4	2500.00000000000	#mgluino
+	5	1373.54252214560	#msquark1
+	6	1633.62913516330	#msquark2
+Block VEGAS
+	1	30	#iters
+	2	30000	#startdiv
+	3	30000	#enddiv
+	4	1000000	#startfin
+	5	5000000	#endfin
+	6	0.4	#alpha
+Block IBPPARA
+	1	0.0001	#lam
+	2	0.00000001	#eps
