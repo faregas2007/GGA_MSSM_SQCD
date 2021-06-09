@@ -61,10 +61,11 @@ def read_to_slha(name, output):
 
 	CF = 4./3.
 	deltab = (CF/2.0)*(alphas/np.pi)*mG*mu*tanb*Ifunc(msq1**2, msq2**2, mG**2)
-	factor = -(1. + 1./tanb**2)
+	deltat = (CF/2.0)*(alphas/np.pi)*mG*mu*(1.0/tanb)*Ifunc(msq1**2, msq2**2, mG**2)
+	factorb = -(1. + 1./tanb**2)
 	factort = -(1. + 1./(1/tanb**2))
-	effb = (1. + (1. + factort)*deltab)/(1 + deltab)
-	efft = (1. + (1. + factor)*deltab)/(1 + deltab)
+	effb = (1. + (1. + factorb)*deltab)/(1 + deltab)
+	efft = (1. + (1. + factort)*deltab)/(1 + deltab)
 
 	if squark == 1:
 		Aqtree = tanb*(2*gq12 - mQQQ*mu)/mQQQ
