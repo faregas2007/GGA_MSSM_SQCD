@@ -102,9 +102,9 @@ def csvwrite(name, index_in):
 	ImDivErr = temp['ImDivErr']
 
 	filename = 'deltatb'+name+'.csv'
-	if(squark == 1):
+	if (squark == 1):
 		squarks = 'stop'
-	else(squark == 2):
+	elif (squark == 2):
 		squarks = 'sbot'
 		
 	if (index_in == 9):
