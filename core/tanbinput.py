@@ -2,15 +2,19 @@ import sys
 import os.path
 import numpy as np
 
+
+"""
+To convert the input from HDECAY format into slha format.
+To included the coversion from At to Ab in diagrams with squark Higgs coupling 
+To included also detab and deltat factor in these diagrams.   
+"""
+
 def Ifunc(a, b, c):
 	return (a*b*np.log(a/b) + b*c*np.log(b/c) + a*c*np.log(a/c))/((a-b)*(b-c)*(c-a))
 
 name = sys.argv[1]
 output = name+".in"
 
-# tanb and mA is the input
-# mA is replaced to tree level value instead of loop-corrected ones in Micheal files
-# tanb is mapped to go from 2, 3, 4, 5, 6, 7, 8, 9, 10, 40
 def read_to_slha(name, output):
 	if(name[1] == 't'):
 		squark = 1
