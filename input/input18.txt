@@ -5,6 +5,9 @@ Block REAL
 	4	0.	#squark_mixing_angle
 	5	0.62759305593007	#a
 	6	-0.77854155711070	#b
+	7	0.72855255848120	# correction factor for diagram with squark Higgs couplings
+Block INTEGER
+	1	2	# t=1, b=2
 Block MASS
 	1	2500.00000000000	#mA
 	2	172.500000000000	#mquark
@@ -15,8 +18,8 @@ Block MASS
 Block VEGAS
 	1	30	#iters
 	2	30000	#startdiv
-	3	30000	#enddiv
-	4	1000000	#startfin
+	3	3000000	#enddiv
+	4	100000	#startfin
 	5	5000000	#endfin
 	6	0.4	#alpha
 Block IBPPARA
