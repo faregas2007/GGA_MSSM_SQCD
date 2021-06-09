@@ -39,17 +39,18 @@ sys.path.insert(0, function_dir)
 	
 def num_integrate(index_in):
 	if (index_in == 9):
-		fcn = 'ampibp_total_'+'CT'+'.py'
+		module = 'ampibp_total_'+'CT'
 	else:
-		fcn = 'ampibp_total_dia'+str(dia_index[index_in])+'.py'
-	module = fcn.strip('.py')
+		module = 'ampibp_total_dia'+str(dia_index[index_in])
 	fcn_module = import_module(module)
+	
 	ibpptotal = getattr(fcn_module, 'ibpptotal')
 	ibpftotal = getattr(fcn_module, 'ibpftotal')
 
 	np.random.seed((1,2,3))
 	fname=['real', 'imag']
 	integ = vegas.Integrator(5*[[eps, 1. - eps]], nhcube_batch=2000, sync_ran=True)
+	
 	pole = []
 	poleerr = []
 	fin = []
