@@ -19,7 +19,7 @@ startfin =islha_obj.blocks['VEGAS'][4]
 endfin = islha_obj.blocks['VEGAS'][5]
 alphafix = islha_obj.blocks['VEGAS'][6]
 eps = islha_obj.blocks['IBPPARA'][2]
-
+corrf = islha_obj.blocks['REAL'][7]
 # get module of function file
 function_dir = sys.argv[2]
 index_in = int(sys.argv[3])
@@ -40,18 +40,24 @@ def main():
 
 	for i in range(2):
 		start = timer()
-		integ(ibpptotal(i), nitn=iters, neval=startdiv, alpha=alphafix)
-		result = integ(ibpptotal(i), nitn=iters, neval=enddiv, alpha=alphafix)
+		integ(ibpptotal(dia_index[index_in], i), nitn=iters, neval=startdiv, alpha=alphafix)
+		result = integ(ibpptotal(dia_index[index_in], i), nitn=iters, neval=enddiv, alpha=alphafix)
 		end = timer()
-		print('diagram%s'%dia_index[index_in]+' '+fname[i]+' '+'pole=%s'%result+' '+'time=%s'%(end-start)+'\n')
+		print('diagram%s'%dia_index[index_in]+' '+fname[i]+' '+'pole=%s'%result.mean+' '+'error=%s'%result.sdev+'time=%s'%(end-start)+'\n')
 		print(result.summary())
 
 	for i in range(2):
 		start = timer()
-		integ(ibpftotal(i), nitn=iters, neval=startfin, alpha=alphafix)
-		result = integ(ibpftotal(i), nitn=iters, neval=endfin, alpha=alphafix)
+		integ(ibpftotal(dia_index[index_in], i), nitn=iters, neval=startfin, alpha=alphafix)
+		result = integ(ibpftotal(dia_index[index_in], i), nitn=iters, neval=endfin, alpha=alphafix)
 		end = timer()
-		print('diagram%s'%dia_index[index_in]+' '+fname[i]+' '+'finite=%s'%result+' '+'time=%s'%(end-start)+'\n')
+		
+		resultmean = result.mean
+		resultsdev = result.sdev
+		if (index_in == 0 or index_in == 6 or index_in == 8):
+			resultmean = result.mean*corrf
+			resultsdev = result.sdev*corrf
+		print('diagram%s'%dia_index[index_in]+' '+fname[i]+' '+'finite=%s'%resultmean+' '+'error=%s'%resultsdev+' '+'time=%s'%(end-start)+'\n')
 		print(result.summary())
 
 if __name__ == '__main__':
