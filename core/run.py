@@ -88,7 +88,7 @@ def num_integrate(index_in):
 
 def csvwrite(name, index_in):
 	import csv
-	temp =main(index_in)
+	temp =num_integrate(index_in)
 	fields = ['squark', 'tanb', 'mA', 'diagrams', 'DDS', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'Lambda', 'Eps']
 	DDS = float(0.0)
 	who = 'KIT'
