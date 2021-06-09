@@ -53,16 +53,16 @@ def num_integrate(index_in):
 
 	for i in range(2):
 		start = timer()
-		integ(ibpptotal(i), nitn=iters, neval=startdiv, alpha=alphafix)
-		result = integ(ibpptotal(i), nitn=iters, neval=enddiv, alpha=alphafix)
+		integ(ibpptotal(dia_index[index_in], i), nitn=iters, neval=startdiv, alpha=alphafix)
+		result = integ(ibpptotal(dia_index[index_in], i), nitn=iters, neval=enddiv, alpha=alphafix)
 		end = timer()
 		pole.append(corrf*result.mean)
 		poleerr.append(corrf*result.sdev)
 
 	for i in range(2):
 		start = timer()
-		integ(ibpftotal(i), nitn=iters, neval=startfin, alpha=alphafix)
-		result = integ(ibpftotal(i), nitn=iters, neval=endfin, alpha=alphafix)
+		integ(ibpftotal(dia_index[index_in], i), nitn=iters, neval=startfin, alpha=alphafix)
+		result = integ(ibpftotal(dia_index[index_in], i), nitn=iters, neval=endfin, alpha=alphafix)
 		end = timer()
 			
 		if(index_in == 0 or index_in == 6 or index_in == 8):
@@ -75,11 +75,12 @@ def num_integrate(index_in):
 	return {'ReDivAvg':fin[0], 'ReDivErr':finerr[0] ,'ImDivAvg':fin[1], 'ImDivErr':finerr[1], 'ReDivAvg':pole[0], 'ReDivErr':poleerr[0],'ImDivAvg':pole[1], 'ImDivErr':poleerr[1]}
 
 
-def csvwrite(name, index_in, who):
+def csvwrite(name, index_in):
 	import csv
 	temp =main(index_in)
 	fields = ['squark', 'tanb', 'mA', 'diagrams', 'DDS', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'Lambda', 'Eps']
 	DDS = float(0.0)
+	who = 'KIT'
 	ReFinAvg = temp['ReFinAvg']
 	ReFinErr = temp['ReFinErr']
 	ImFinAvg = temp['ImDivAvg']
