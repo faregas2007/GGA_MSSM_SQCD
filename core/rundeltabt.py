@@ -43,39 +43,42 @@ def num_integrate(index_in):
 	ibpptotal = getattr(fcn_module, 'ibpptotal')
 	ibpftotal = getattr(fcn_module, 'ibpftotal')
 
-	if(index_in == 0 or index_in == 6 or index_in == 8):
-		np.random.seed((1,2,3))
-		fname=['real', 'imag']
-		integ = vegas.Integrator(5*[[eps, 1. - eps]], nhcube_batch=2000, sync_ran=True)
-		pole = []
-		poleerr = []
-		fin = []
-		finerr = []
+	np.random.seed((1,2,3))
+	fname=['real', 'imag']
+	integ = vegas.Integrator(5*[[eps, 1. - eps]], nhcube_batch=2000, sync_ran=True)
+	pole = []
+	poleerr = []
+	fin = []
+	finerr = []
 
-		for i in range(2):
-			start = timer()
-			integ(ibpptotal(i), nitn=iters, neval=startdiv, alpha=alphafix)
-			result = integ(ibpptotal(i), nitn=iters, neval=enddiv, alpha=alphafix)
-			end = timer()
-			pole.append(corrf*result.mean)
-			poleerr.append(corrf*result.sdev)
+	for i in range(2):
+		start = timer()
+		integ(ibpptotal(i), nitn=iters, neval=startdiv, alpha=alphafix)
+		result = integ(ibpptotal(i), nitn=iters, neval=enddiv, alpha=alphafix)
+		end = timer()
+		pole.append(corrf*result.mean)
+		poleerr.append(corrf*result.sdev)
 
-		for i in range(2):
-			start = timer()
-			integ(ibpftotal(i), nitn=iters, neval=startfin, alpha=alphafix)
-			result = integ(ibpftotal(i), nitn=iters, neval=endfin, alpha=alphafix)
-			end = timer()
+	for i in range(2):
+		start = timer()
+		integ(ibpftotal(i), nitn=iters, neval=startfin, alpha=alphafix)
+		result = integ(ibpftotal(i), nitn=iters, neval=endfin, alpha=alphafix)
+		end = timer()
+			
+		if(index_in == 0 or index_in == 6 or index_in == 8):
 			fin.append(corrf*result.mean)
 			finerr.append(corrf*result.sdev)
 
+		fin.append(result.mean)
+		finerr.append(result.sdev)
+	
 	return {'ReDivAvg':fin[0], 'ReDivErr':finerr[0] ,'ImDivAvg':fin[1], 'ImDivErr':finerr[1], 'ReDivAvg':pole[0], 'ReDivErr':poleerr[0],'ImDivAvg':pole[1], 'ImDivErr':poleerr[1]}
 
 
-def csvwrite(name, index_in):
+def csvwrite(name, index_in, who):
 	import csv
 	temp =main(index_in)
 	fields = ['squark', 'tanb', 'mA', 'diagrams', 'DDS', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'Lambda', 'Eps']
-	who = 'Approx'
 	DDS = float(0.0)
 	ReFinAvg = temp['ReFinAvg']
 	ReFinErr = temp['ReFinErr']
@@ -91,7 +94,7 @@ def csvwrite(name, index_in):
 		squarks = 'stop'
 	else(squark == 2):
 		squarks = 'sbot'
-	rows = [[squarks, str(tanb), str(mA), 'Approx', str(DDS), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(Lambda), str(eps)]]
+	rows = [[squarks, str(tanb), str(mA), who, str(DDS), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(Lambda), str(eps)]]
 	with open(filename, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile)
 		csvwriter.writerow(fields)
