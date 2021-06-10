@@ -93,6 +93,7 @@ def num_integrate(index_in):
 
 def csvwrite(name, index_in):
 	import csv
+	fields = [['diagrams', 'squark', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'ImDivAvg', 'ImDivErr', 'lam', 'eps']]
 	temp =num_integrate(index_in)
 	diagram = dia_index[index_in]
 	DDS = float(0.0)
