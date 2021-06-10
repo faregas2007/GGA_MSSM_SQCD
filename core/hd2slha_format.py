@@ -10,7 +10,7 @@ To included also detab and deltat factor in these diagrams.
 """
 
 def Ifunc(a, b, c):
-	return (a*b*np.log(a/b) + b*c*np.log(b/c) + a*c*np.log(a/c))/((a-b)*(b-c)*(c-a))
+	return (a*b*np.log(a/b) + b*c*np.log(b/c) + a*c*np.log(c/a))/((a-b)*(b-c)*(a-c))
 
 name = sys.argv[1]
 output = name+".in"
@@ -63,14 +63,18 @@ def read_to_slha(name, output):
 	gq22 = float(minputs.get('GAQQ(2,2)'))
 	"""
 
+	"""
+	corrections At to Ab in diagram with squark Higgs couplings
+	"""
 	CF = 4./3.
 	deltab = (CF/2.0)*(alphas/np.pi)*mG*mu*tanb*Ifunc(msq1**2, msq2**2, mG**2)
-	deltat = (CF/2.0)*(alphas/np.pi)*mG*mu*(1.0/tanb)*Ifunc(msq1**2, msq2**2, mG**2)
+	#deltat = (CF/2.0)*(alphas/np.pi)*mG*mu*(1.0/tanb)*Ifunc(msq1**2, msq2**2, mG**2)
 	factorb = -(1. + 1./tanb**2)
-	factort = -(1. + 1./(1/tanb**2))
+	#factort = -(1. + 1./(1/tanb**2))
 	effb = (1. + (1. + factorb)*deltab)/(1 + deltab)
-	efft = (1. + (1. + factort)*deltab)/(1 + deltab)
-
+	#efft = (1. + (1. + factort)*deltab)/(1 + deltab)
+	efft = 1.0
+	
 	if squark == 1:
 		Aqtree = tanb*(2*gq12 - mQQQ*mu)/mQQQ
 		#Aqtree = Aq
