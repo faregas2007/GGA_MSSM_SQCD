@@ -24,6 +24,10 @@ corrf = islha_obj.blocks["REAL"][7]
 mA = islha_obj.blocks['MASS'][1]
 beta = islha_obj.blocks['REAL'][3]
 
+squark = islha_obj.blocks['INTEGER'][1]
+lam = islha_obj.blocks['IBPPARA'][1]
+eps = islha_obj.blocks['IBPPARA'][2]
+
 tanb = np.round(np.tan(beta), 1)
 if(np.floor(tanb)-tanb == 0.0):
 	tanb = int(tanb)
@@ -90,7 +94,7 @@ def num_integrate(index_in):
 def csvwrite(name, index_in):
 	import csv
 	temp =num_integrate(index_in)
-	fields = ['squark', 'tanb', 'mA', 'diagrams', 'DDS', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'Lambda', 'Eps']
+	diagram = dia_index[index_in]
 	DDS = float(0.0)
 	who = 'KIT'
 	ReFinAvg = temp['ReFinAvg']
@@ -102,7 +106,7 @@ def csvwrite(name, index_in):
 	ImDivAvg = temp['ImDivAvg']
 	ImDivErr = temp['ImDivErr']
 
-	filename = 'deltatb'+name+'.csv'
+	filename = name+'.csv'
 	if (squark == 1):
 		squarks = 'stop'
 	elif (squark == 2):
@@ -110,10 +114,10 @@ def csvwrite(name, index_in):
 		
 	if (index_in == 9):
 		filename = 'CT'+sys.argv[1]+'.csv'
-		rows = [[squarks, str(tanb), str(mA), who, str(DDS), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(Lambda), str(eps)]]
+		rows = [[str(diagrams), str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps)]]
 	else:
 		filename = str(diagrams)+sys.argv[1]+'.csv'
-		rows = [[squarks, str(tanb), str(mA), who, str(DDS), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(Lambda), str(eps)]]
+		rows = [[str(diagrams), str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps)]]
 	with open(filename, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile)
 		csvwriter.writerow(fields)
