@@ -43,6 +43,7 @@ index_in = int(sys.argv[3])
 dia_index = [2, 3, 5, 7, 9, 11, 12, 13, 14, 15]
 sys.path.insert(0, function_dir)
 
+vegasbatch = False
 	
 def num_integrate(index_in):
 	if (index_in == 9):
