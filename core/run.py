@@ -5,6 +5,8 @@ import numpy as np
 import gvar as gv
 import os, sys
 import pyslha
+import pycuba
+from auxiliary import *
 from importlib import import_module
 from timeit import default_timer as timer
 import warnings
@@ -18,6 +20,7 @@ enddiv = islha_obj.blocks['VEGAS'][3]
 startfin =islha_obj.blocks['VEGAS'][4]
 endfin = islha_obj.blocks['VEGAS'][5]
 alphafix = islha_obj.blocks['VEGAS'][6]
+integrator = islha_obj.blocks['VEGAS'][8]
 eps = islha_obj.blocks['IBPPARA'][2]
 corrf = islha_obj.blocks["REAL"][7]
 
@@ -69,6 +72,8 @@ def num_integrate(index_in):
 			poleerr.append(ibpptotal(i))
 			fin.append(ibpftotal(i))
 			finerr.append(ibpftotal(i))
+	# speed up for diagram 7
+	# Cuhre integrator is the best one.
 	elif (index_in == 3 and vegasbatch == False):
 		NDIM = 2
 		NCOMP = 1
