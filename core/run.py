@@ -44,6 +44,8 @@ sys.path.insert(0, function_dir)
 def num_integrate(index_in):
 	if (index_in == 9):
 		module = 'ampibp_total_'+'CT'
+	elif (index_in == 3 and vegasbatch == True):
+		module = 'ampibp_total_dia7'
 	else:
 		module = 'ampibp_total_dia'+str(dia_index[index_in])
 	fcn_module = import_module(module)
@@ -60,26 +62,49 @@ def num_integrate(index_in):
 	fin = []
 	finerr = []
 
+	start = timer()
 	if (index_in == 9):
 		for i in range(2):
 			pole.append(ibpptotal(i))
 			poleerr.append(ibpptotal(i))
 			fin.append(ibpftotal(i))
 			finerr.append(ibpftotal(i))
+	elif (index_in == 3 and vegasbatch == False):
+		NDIM = 2
+		NCOMP = 1
+		KEY = 0
+		VERBOSE = 0
+		module = 'ampibp_total_dia7_cuba'
+		fcn_module = import_module(module)
+		
+		freal = getattr(fcn_module, 'freal')
+		fimag = getattr(fcn_module, 'fimag')
+		preal = getattr(fcn_module, 'preal')
+		pimag = getattr(fcn_module, 'pimag')
+		
+		for i in [preal, pimag]:
+			temp = Integrator(integrator, i, NDIM, KEY, startfin, endfin, VERBOSE)
+			result = float(temp['result'])
+			error = float(temp['error'])
+			pole.append(result)
+			poleerr.append(error)
+			
+		for i in [freal, fimag]:
+			temp = Integrator(integrator, i, NDIM, KEY, startdiv, enddiv, VERBOSE)
+			result = float(temp['result'])
+			error = float(temp['error'])
+			fin.append(result)
+			finerr.append(error)
 	else:
 		for i in range(2):
-			start = timer()
 			integ(ibpptotal(i), nitn=iters, neval=startdiv, alpha=alphafix)
 			result = integ(ibpptotal(i), nitn=iters, neval=enddiv, alpha=alphafix)
-			end = timer()
 			pole.append(result.mean)
 			poleerr.append(result.sdev)
 
 		for i in range(2):
-			start = timer()
 			integ(ibpftotal(i), nitn=iters, neval=startfin, alpha=alphafix)
 			result = integ(ibpftotal(i), nitn=iters, neval=endfin, alpha=alphafix)
-			end = timer()
 			
 			if(index_in == 0 or index_in == 6 or index_in == 8):
 				fin.append(corrf*result.mean)
@@ -87,13 +112,13 @@ def num_integrate(index_in):
 
 			fin.append(result.mean)
 			finerr.append(result.sdev)
-	
-	return {'ReDivAvg':fin[0], 'ReDivErr':finerr[0] ,'ImDivAvg':fin[1], 'ImDivErr':finerr[1], 'ReDivAvg':pole[0], 'ReDivErr':poleerr[0],'ImDivAvg':pole[1], 'ImDivErr':poleerr[1]}
+	end = timer()
+	return {'ReFinAvg':fin[0], 'ReFinErr':finerr[0] ,'ImDivAvg':fin[1], 'ImDivErr':finerr[1], 'ReDivAvg':pole[0], 'ReDivErr':poleerr[0],'ImDivAvg':pole[1], 'ImDivErr':poleerr[1], 'Time':end-start}
 
 
 def csvwrite(name, index_in):
 	import csv
-	fields = [['diagrams', 'squark', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'ImDivAvg', 'ImDivErr', 'lam', 'eps']]
+	fields = ['diagrams', 'squark', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'ImDivAvg', 'ImDivErr', 'lam', 'eps', 'TIME']
 	temp =num_integrate(index_in)
 	diagram = dia_index[index_in]
 	DDS = float(0.0)
@@ -106,8 +131,8 @@ def csvwrite(name, index_in):
 	ReDivErr = temp['ReDivErr']
 	ImDivAvg = temp['ImDivAvg']
 	ImDivErr = temp['ImDivErr']
-
-	filename = name+'.csv'
+	TIME = temp['TIME']
+	
 	if (squark == 1):
 		squarks = 'stop'
 	elif (squark == 2):
@@ -115,10 +140,10 @@ def csvwrite(name, index_in):
 		
 	if (index_in == 9):
 		filename = 'CT'+sys.argv[1]+'.csv'
-		rows = [[str(diagrams), str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps)]]
+		rows = [[str(diagrams), str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(TIME)]]
 	else:
 		filename = str(diagrams)+sys.argv[1]+'.csv'
-		rows = [[str(diagrams), str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps)]]
+		rows = [[str(diagrams), str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(TIME)]]
 	with open(filename, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile)
 		csvwriter.writerow(fields)
@@ -128,7 +153,6 @@ def csvwrite(name, index_in):
 if __name__ == '__main__':
 	if True:
 		name = sys.argv[1]
-		num_integrate(index_in)
 		csvwrite(name, index_in)
 	else:
 		import hotshot, hotshot.stats
