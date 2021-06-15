@@ -52,7 +52,7 @@ def vegas_Integrator(module, ndim, userdata, epsrel, epsabs, verbose, ncomp, see
 	results = pycuba.Vegas(module, ndim, userdata, epsrel, epsabs, verbose, ncomp, seed,
 			mineval, maxeval, nstart, nincrease, nbatch, gridno, statefile, nvec)
 	end = timer()
-	return {'result':results['results'][0][u'integral'], 'error':results['results'][0]['error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
+	return {'result':results['results'][0][u'integral'], 'error':results['results'][0][u'error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
 
 def cuhre_Integrator(module, ndim, key, mineval, maxeval, ncomp, userdata, seed, epsrel, epsabs, verbose,
 			statefile, nvec):
@@ -64,7 +64,7 @@ def cuhre_Integrator(module, ndim, key, mineval, maxeval, ncomp, userdata, seed,
 	results = pycuba.Cuhre(module, ndim, key, mineval, maxeval, ncomp, userdata, seed,
 			epsrel, epsabs, verbose, statefile, nvec)
 	end = timer()
-	return {'result':results['results'][0][u'integral'], 'error':results['results'][0]['error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
+	return {'result':results['results'][0][u'integral'], 'error':results['results'][0][u'error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
 
 def suave_Integrator(module, ndim, nnew, nmin, flatness, userdata, epsrel, epsabs, verbose, ncomp, seed, mineval,
 			maxeval, statefile, nvec):
@@ -77,7 +77,7 @@ def suave_Integrator(module, ndim, nnew, nmin, flatness, userdata, epsrel, epsab
 	results = pycuba.Suave(module, ndim, nnew, nmin, flatness, userdata,
 			epsrel, epsabs, verbose, ncomp, seed, mineval, maxeval, statefile, nvec)
 	end = timer()
-	return {'result':results['results'][0][u'integral'], 'error':results['results'][0]['error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
+	return {'result':results['results'][0][u'integral'], 'error':results['results'][0][u'error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
 
 def divonne_Integrator(module, ndim, key1, key2, key3, maxpass, border, maxchisq, mindeviation,
 			mineval, maxeval, ncomp, ldxgiven, xgiven, nextra, peakfinder, userdata, seed, epsrel,
@@ -92,7 +92,7 @@ def divonne_Integrator(module, ndim, key1, key2, key3, maxpass, border, maxchisq
 		maxchisq, mindeviation, mineval, maxeval, ncomp, ldxgiven, xgiven, nextra, peakfinder,
 		userdata, seed, epsrel, epsabs, verbose, statefile, nvec)
 	end = timer()
-	return {'result':results['results'][0][u'integral'], 'error':results['results'][0]['error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
+	return {'result':results['results'][0][u'integral'], 'error':results['results'][0][u'error'], 'pvalue':results['results'][0][u'prob'], 'time':end-start}
 
 def Integrator(name, module, ndim, key, mineval, maxeval, verbose):
 
