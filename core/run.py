@@ -40,25 +40,24 @@ function_dir = sys.argv[2]
 index_in = int(sys.argv[3])
 #dia_index = sys.argv[3]
 
-dia_index = [2, 3, 5, 7, 9, 11, 12, 13, 14, 'CT']
+dia_index = [2, 3, 5, 7, 9, 11, 12, 13, 14, 15]
 sys.path.insert(0, function_dir)
 
 vegasbatch = False
 	
 def num_integrate(index_in):
+	np.random.seed((1,2,3))
 	if (index_in == 9):
-		module = 'ampibp_total_'+'CT'
+		module = 'ampibp_total_diaCT'
 	elif (index_in == 3 and vegasbatch == True):
 		module = 'ampibp_total_dia7'
 	else:
 		module = 'ampibp_total_dia'+str(dia_index[index_in])
+
 	fcn_module = import_module(module)
-	
 	ibpptotal = getattr(fcn_module, 'ibpptotal')
 	ibpftotal = getattr(fcn_module, 'ibpftotal')
 
-	np.random.seed((1,2,3))
-	fname=['real', 'imag']
 	integ = vegas.Integrator(5*[[eps, 1. - eps]], nhcube_batch=2000, sync_ran=True)
 	
 	pole = []
@@ -69,9 +68,9 @@ def num_integrate(index_in):
 	start = timer()
 	if (index_in == 9):
 		for i in range(2):
-			pole.append(ibpptotal(i))
+			pole.append(ibpptotal(i)[0])
 			poleerr.append(0.0)
-			fin.append(ibpftotal(i))
+			fin.append(ibpftotal(i)[0])
 			finerr.append(0.0)
 	# speed up for diagram 7
 	# Cuhre integrator is the best one.
@@ -136,19 +135,16 @@ def csvwrite(name, index_in):
 	ReDivErr = temp['ReDivErr']
 	ImDivAvg = temp['ImDivAvg']
 	ImDivErr = temp['ImDivErr']
-	TIME = temp['TIME']
+	time = temp['TIME']
 	
 	if (squark == 1):
 		squarks = 'stop'
 	elif (squark == 2):
 		squarks = 'sbot'
 		
-	if (index_in == 9):
-		filename = 'DCT'+sys.argv[1]+'.csv'
-		rows = [[diagrams, str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(TIME)]]
-	else:
-		filename = diagrams+sys.argv[1]+'.csv'
-		rows = [[diagrams, str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(TIME)]]
+	filename = diagrams+name+'.csv'
+	rows = [[diagrams, str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(time), str(msq1), str(msq2), str(At), str(mA), str(np.tan(beta))]]
+	
 	with open(filename, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile)
 		csvwriter.writerow(fields)
