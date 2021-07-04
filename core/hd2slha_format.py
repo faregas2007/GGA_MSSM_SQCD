@@ -5,12 +5,8 @@ import numpy as np
 
 """
 To convert the input from HDECAY format into slha format.
-To included the coversion from At to Ab in diagrams with squark Higgs coupling 
-To included also detab and deltat factor in these diagrams.   
+To include the coversion from At to Ab in diagrams with squark Higgs coupling    
 """
-
-def Ifunc(a, b, c):
-	return (a*b*np.log(a/b) + b*c*np.log(b/c) + a*c*np.log(c/a))/((a-b)*(b-c)*(a-c))
 
 name = sys.argv[1]
 output = name+".in"
@@ -22,9 +18,9 @@ def read_to_slha(name, output):
 		squark = 2
 
 	if squark == 1:
-		minputs = {'M_A':{}, 'M_Q':{}, 'M_G':{}, 'TG(BETA)':{}, 'MU':{}, 'QQ':{}, 'M_Q(QQ)':{}, 'A_t':{}, 'M_S1':{}, 'M_S2':{}, 'G_Q^A':{}, 'ALPHAS(QQ)':{}, 'SIN(THETA)':{}, 'COS(THETA)':{}, 'GAQQ(1,1)':{}, 'GAQQ(1,2)':{}, 'GAQQ(2,1)':{}, 'GAQQ(2,2)':{}}
+		minputs = {'M_A':{}, 'M_Q':{}, 'M_G':{}, 'TG(BETA)':{}, 'MU':{}, 'QQ':{}, 'M_Q(QQ)':{}, 'A_t':{}, 'M_S1':{}, 'M_S2':{}, 'G_Q^A':{}, 'ALPHAS(QS)':{}, 'SIN(THETA)':{}, 'COS(THETA)':{}, 'GAQQ(1,1)':{}, 'GAQQ(1,2)':{}, 'GAQQ(2,1)':{}, 'GAQQ(2,2)':{}}
 	elif squark == 2:
-		minputs = {'M_A':{}, 'M_Q':{}, 'M_G':{}, 'TG(BETA)':{}, 'MU':{}, 'QQ':{}, 'M_Q(QQ)':{}, 'A_b':{}, 'M_S1':{}, 'M_S2':{}, 'G_Q^A':{}, 'ALPHAS(QQ)':{}, 'SIN(THETA)':{}, 'COS(THETA)':{}, 'GAQQ(1,1)':{}, 'GAQQ(1,2)':{}, 'GAQQ(2,1)':{}, 'GAQQ(2,2)':{}}
+		minputs = {'M_A':{}, 'M_Q':{}, 'M_G':{}, 'TG(BETA)':{}, 'MU':{}, 'QQ':{}, 'M_Q(QQ)':{}, 'A_b':{}, 'M_S1':{}, 'M_S2':{}, 'G_Q^A':{}, 'ALPHAS(QS)':{}, 'SIN(THETA)':{}, 'COS(THETA)':{}, 'GAQQ(1,1)':{}, 'GAQQ(1,2)':{}, 'GAQQ(2,1)':{}, 'GAQQ(2,2)':{}}
 
 	lines = []
 	if not os.path.isfile(name):
@@ -53,41 +49,26 @@ def read_to_slha(name, output):
 	msq1 = float(minputs.get('M_S1'))
 	msq2 = float(minputs.get('M_S2'))
 	gqA = float(minputs.get('G_Q^A'))
-	alphas = float(minputs.get('ALPHAS(QQ)'))
+	alphaqs = float(minputs.get('ALPHAS(QS)'))
 	sintheta = float(minputs.get('SIN(THETA)'))
 	costheta = float(minputs.get('COS(THETA)'))
 	gq11 = float(minputs.get('GAQQ(1,1)'))
 	gq12 = float(minputs.get('GAQQ(1,2)'))
 	gq21 = float(minputs.get('GAQQ(2,1)'))
-	"""
-	gq22 = float(minputs.get('GAQQ(2,2)'))
-	"""
 
-	"""
-	corrections At to Ab in diagram with squark Higgs couplings
-	"""
-	CF = 4./3.
-	deltab = (CF/2.0)*(alphas/np.pi)*mG*mu*tanb*Ifunc(msq1**2, msq2**2, mG**2)
-	#deltat = (CF/2.0)*(alphas/np.pi)*mG*mu*(1.0/tanb)*Ifunc(msq1**2, msq2**2, mG**2)
+	#corrections At to Ab in diagram with squark Higgs couplings	
 	factorb = -(1. + 1./tanb**2)
-	#factort = -(1. + 1./(1/tanb**2))
-	effb = (1. + (1. + factorb)*deltab)/(1 + deltab)
-	#efft = (1. + (1. + factort)*deltab)/(1 + deltab)
-	efft = 1.0
 	
 	if squark == 1:
 		Aqtree = tanb*(2*gq12 - mQQQ*mu)/mQQQ
-		#Aqtree = Aq
-		corrfactor = 1
-		totalcorrfactor = corrfactor/efft
+		totalcorrfactor = 1
 	elif squark == 2:
 		Aqtree = (2*gq12 - mQQQ*mu)/(mQQQ*tanb)
-		#Aqtree = Aq
-		corrfactor = (mu + Aqtree*tanb)/((mu*tanb + Aqtree)*tanb)
-		totalcorrfactor = corrfactor/effb
+		totalcorrfactor = (mu + Aqtree*tanb)/((mu*tanb + Aqtree)*tanb)
+	
 	if(squark == 1):
 		text="""Block QCD
-	1	%(alphas).12f	#alphas
+	1	%(alphaqs).12f	#alphaqs
 Block REAL
 	1	%(mu).12f	#mu
 	2	%(Aqtree).12f	#Aq
@@ -114,13 +95,14 @@ Block VEGAS
 	5	3000000	#endfin
 	6	0.4	#alpha
 	7	1000	#increase
+	8	Cuhre	#integrator
 Block IBPPARA
 	1	0.0001	#lambda
 	2	0.00000001	#epsilon
 """
 	elif(squark == 2):
 		text = """Block QCD
-	1	%(alphas).12f	#alphas
+	1	%(alphaqs).12f	#alphaqs
 Block REAL
 	1	%(mu).12f	#mu
 	2	%(Aqtree).12f	#Aq
@@ -147,11 +129,12 @@ Block VEGAS
 	5	3000000	#endfin
 	6	0.4	#alpha
 	7	1000	#increase
+	8	Cuhre	#integrator
 Block IBPPARA
 	1	0.0001	#lambda
 	2	0.00000001	#epsilon
 """
-	dico = {'alphas':alphas, 'mu':mu, 'Aqtree':Aqtree, 'beta':np.arctan(tanb), 'sintheta':sintheta, 'costheta':costheta, 'totalcorr':totalcorrfactor, 'gq12':gq12, 'squark':squark, 'mA':mA, 'mQ':mQ, 'mQQQ':mQQQ, 'mG':mG, 'msq1':msq1, 'msq2':msq2}
+	dico = {'alphaqs':alphaqs, 'mu':mu, 'Aqtree':Aqtree, 'beta':np.arctan(tanb), 'sintheta':sintheta, 'costheta':costheta, 'totalcorr':totalcorrfactor, 'gq12':gq12, 'squark':squark, 'mA':mA, 'mQ':mQ, 'mQQQ':mQQQ, 'mG':mG, 'msq1':msq1, 'msq2':msq2}
 	return open(output, 'w').write(text%dico)
 
 read_to_slha(name, output)
