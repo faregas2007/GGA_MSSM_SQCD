@@ -24,7 +24,10 @@ integrator = str(islha_obj.blocks['VEGAS'][7])
 eps = islha_obj.blocks['IBPPARA'][2]
 corrf = islha_obj.blocks["REAL"][7]
 
+Aq = islha_obj.blocks['REAL'][1]
 mA = islha_obj.blocks['MASS'][1]
+msq1 = islha_obj.blocks['MASS'][5]
+msq2 = islha_obj.blocks['MASS'][6]
 beta = islha_obj.blocks['REAL'][3]
 
 squark = islha_obj.blocks['INTEGER'][1]
@@ -143,7 +146,7 @@ def csvwrite(name, index_in):
 		squarks = 'sbot'
 		
 	filename = diagrams+name+'.csv'
-	rows = [[diagrams, str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(time), str(msq1), str(msq2), str(At), str(mA), str(np.tan(beta))]]
+	rows = [[diagrams, str(squark), who, str(ReFinAvg), str(ReFinErr), str(ReDivAvg), str(ReDivErr), str(ImFinAvg), str(ImFinErr), str(ImDivAvg), str(ImDivErr), str(lam), str(eps), str(time), str(msq1), str(msq2), str(Aq), str(mA), str(np.tan(beta))]]
 	
 	with open(filename, 'w') as csvfile:
 		csvwriter = csv.writer(csvfile)
