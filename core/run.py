@@ -20,7 +20,7 @@ enddiv = islha_obj.blocks['VEGAS'][3]
 startfin =islha_obj.blocks['VEGAS'][4]
 endfin = islha_obj.blocks['VEGAS'][5]
 alphafix = islha_obj.blocks['VEGAS'][6]
-integrator = str(islha_obj.blocks['VEGAS'][7])
+integrator = str(islha_obj.blocks['VEGAS'][8])
 eps = islha_obj.blocks['IBPPARA'][2]
 corrf = islha_obj.blocks["REAL"][7]
 
@@ -126,7 +126,7 @@ def num_integrate(index_in):
 
 def csvwrite(name, index_in):
 	import csv
-	fields = ['diagrams', 'squark', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'ImDivAvg', 'ImDivErr', 'lam', 'eps', 'TIME']
+	fields = ['diagrams', 'squark', 'who', 'ReFinAvg', 'ReFinErr', 'ReDivAvg', 'ReDivErr', 'ImFinAvg', 'ImFinErr', 'ImDivAvg', 'ImDivErr', 'lam', 'eps', 'TIME', 'msq1', 'msq2', 'Aq', 'mA', 'beta']
 	temp =num_integrate(index_in)
 	diagram = 'D' + str(dia_index[index_in])
 	who = 'KIT'
