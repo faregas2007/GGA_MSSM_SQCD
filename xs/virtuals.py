@@ -31,12 +31,12 @@ def Asqtau(msq, mhiggs, lpesudo):
 		Asqtau = 0.0
 	return Asqtau
 
-# squared amplitute
+# squared amplitude
 def AMPQ(mt, mb, mG, lpesudo, tanbresum, tantresum, alphas, norder):
 	"""
-	CqQCD: NLO QCD contribution from quark part contribution --> todo list.
-	CqSQCD: NLO SQCD contribution from quark part contribution
-	mG: will use Gluion mass, fixed parameters in Micheal input
+	CqQCD: NLO QCD contributions from quark part contributions --> todo list.
+	CqSQCD: NLO SQCD contributions from quark part contributions
+	mG: will use Gluino mass, fixed parameters in Micheal input
 	mu: will use muSUSY scale, fixed parameters in Micheal input
 	"""
 
