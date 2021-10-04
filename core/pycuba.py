@@ -9,7 +9,7 @@ that the call is in parallel and writes to the same memory location, causing
 overrides. This could be overcome by using locks.
 """
 os.environ['CUBACORES'] = '0'
-lib = ctypes.cdll.LoadLibrary('/path/to/libcuba.so')
+lib = ctypes.cdll.LoadLibrary('./libcuba.so')
 
 NULL = ctypes.POINTER(c_int)()
 
