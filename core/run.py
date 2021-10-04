@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 param_fp = Path(config_dir, "params.json")
 params = Namespace(**load_dict(param_fp))
 
-vegasbatch = params.vegasbatch
+global vegasbatch = params.vegasbatch
 function_dir = amp_dir
 index_in = params.index_in
 
@@ -47,13 +47,12 @@ def num_integrate(index_in=index_in, lam=lam):
 	start = timer()
 	if (index_in == 9):
 		for i in range(2):
-			pole.append(ibpptotal(i)[0])
+			pole.append(ibpptotal(i, lam)[0])
 			poleerr.append(0.0)
-			fin.append(ibpftotal(i)[0])
+			fin.append(ibpftotal(i, lam)[0])
 			finerr.append(0.0)
 
 	elif (index_in == 3 and vegasbatch == False):
-		lam1 = lam
 		NDIM = 2
 		NCOMP =1
 		KEY = 0

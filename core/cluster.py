@@ -22,7 +22,7 @@ def sbatch(
     lam=params.lam):
 
     os.chdir(input_dir)
-    wrap = f"python3 {core_dir}/run2.py -id {index_in} -lam {lam} -in {input_file} -amp {amp_dir}"
+    wrap = f"python3 {core_dir}/run.py -id {index_in} -lam {lam} -in {input_file} -amp {amp_dir}"
     print(wrap)
     sub = [
         'sbatch',
