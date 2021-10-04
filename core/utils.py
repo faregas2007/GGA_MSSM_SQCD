@@ -13,12 +13,6 @@ def load_dict(filepath):
         d = json.load(fp)
     return d
 
-"""
-params_fp = Path(config_dir, "params.json")
-params = Namespace(**load_dict(params_fp))
-print(params)
-"""
-
 def parse_arguments():
     parser = argparse.ArgumentParser(description='gga_mssm_sqcd')
     parser.add_argument('-id', '--index_in', type=lambda x: int(float(x)), metavar='', help='diagram index',)
