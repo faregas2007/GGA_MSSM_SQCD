@@ -16,6 +16,16 @@ Delete current version of sqcd corrections in xs.
 
 Added summaryfile.csv file for CSQCD factor normalized to LO factor. 
 
+# Install:
+
+For pylooptools, 
+
+python3 setup.py install
+
+In ltools.py, DLL_NAME is replaced with a path to looptools.so. To test,
+
+python3 -m import "from pylooptools.ltools import *"
+
 # External package:
 
 https://github.com/djukanovic/pylooptools
