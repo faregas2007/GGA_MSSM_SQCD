@@ -1,12 +1,25 @@
 # GGA_MSSM_SQCD
-Individual run - by default will use python3, if one use cmd mode 
 
-cd input_dir
+In order to use richardson flag, user has to set the richardson flag in .json file to true and pick a value for order k of the extrapolation. Then,
 
-python3 {core_dir}/run.py -id {diagrams_id} -lam {lambda_shift} -in {input_file} -amp {amp_dir}
+python3 main.py.
 
-Change the json file to the configuration that you want. You have turn on richardson = true, and change the k, order of the Richardson extrapolation, to whatever order that you want. By default, it will need a cluster to take advatanges parallel computing instead of individual run. Using 
+By default, the runs will submit to each order to cluster using sbatch.
 
-python3 main.py
+All diagrams are stable below and above quark threshold up to lam=10^-5, where lam is the imaginary shift of quark and squark masses.
 
-All of the amplitudes are numerical stable below and above quark threshold upto lam=10^-4,-5. These amplitudes will become unstable above squark threshold, for whatever values of lam. 
+# Update: 
+
+Real and QCD corrections part for xs from sushi.
+
+Delete current version of sqcd corrections in xs.
+
+Added summaryfile.csv file for CSQCD factor normalized to LO factor. 
+
+# External package:
+
+https://github.com/djukanovic/pylooptools
+
+https://github.com/JohannesBuchner/PyMultiNest
+
+https://sushi.hepforge.org/

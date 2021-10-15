@@ -50,7 +50,7 @@ def runalphas(api0, mu0, mu, nf, nloop, size):
 	"""
 
 	if (nloop == 0):
-		apiout = api0
+		return api0
 
 
 	# integration bounds (logmu2 is the integration variable)
@@ -99,7 +99,7 @@ def runmass(mass0, api0, apif, nf, nloop):
 	"""
 
 	if (nloop == 0):
-		massout = mass0
+		return mass0
 
 	gamma0, gamma1, gamma2, gamma3 = inigamma(nf, nloop)
 	beta0, beta1, beta2, beta3 = inibeta(nf, nloop)

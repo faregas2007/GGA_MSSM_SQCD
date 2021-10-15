@@ -1,0 +1,11 @@
+numpy=1.19.5
+pandas=1.0.5
+vegas=4.0.3
+argparse=1.1
+pyslha=3.2.5
+json=2.0.9
+ctypes=1.1.0
+lhapdf=6.2.3
+mpmath=1.1.0
+scipy=1.3.3
+
