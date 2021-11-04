@@ -1,0 +1,9 @@
+{
+    "name":"sbot.40.2400.in",
+    "index_in":6,
+    "lam":0.001,
+    "k":9,
+    "vegasbatch":false,
+    "verbose":false,
+    "richardson":false
+}
