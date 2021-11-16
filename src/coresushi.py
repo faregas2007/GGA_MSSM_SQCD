@@ -1,39 +1,60 @@
 # coresushi.py
-# include sqcd c factor amplitude
-
-# first run renschemes to generate models.json
-# then run sigma.py taken input from models.json to generate hadronic cross-section --> if qcd flags is on.
-# sqcd parameters then are feeded into csqcd amplitude calcuations
-# the results came back as the csqcd.csv datatable.
-# then sigma.py taken input from models.json, cqcd.csv and csqcd.csv to evaluate hadronic cross-section.
-
-# each computational stages could be tracked using logging handlers storing at logs directory. 
-# for multiple runs with several parameters points --> class coresushi will have attributes
-# for scanning relevant parameters (mA, tanb).
-# for various plots: generate a full csv file with a format from full json files
-# norder, sigma, error, tanb, mA, muRggh, muFggh, muD, alphasgg, deltamb, mst1, mst2, msb1, msb2, thetab, thetat, Ab, At, muSUSY, mb, mbyuk, mbos, mbsb, mt, mc, mcos, gb, gt, gc, dgb, tanbresum, mbsch, thetasch, Abch
-
+# include sqcd c factor
+# bidirectional control
 from renschemes import *
 from sigma import *
+from include import *
 
-class coresushi:
-    def __init__(renschemes, sigma):
-        self._renschemes = renschemes
-        self._sigma = sigma
+# invoke: where all commands will be executed based on some condition.
+class invoke:
 
-    def operations(self):
-        pass
+    def __init__(self):
+        self._commands = {}
+
+    def register(self, command_name, command):
+        """Register commands in Invoker """
+        self._commands[command_name] = command
     
-    def scannings(self):
-        pass
+    def execute(self, command_name):
+        """Execute any registered commands"""
+        if(command_name in self._commands.keys()):
+            self._commands[command_name].execute()
+        else:
+            print(f"Command[{command_name}] not recognised")
+
+
+# Receiver --> in the imported modules.
+
+# submit multiple jobs
+class cluster(Command):
+    def __init__(self, var: cluster):
+        self._var = cluster()
     
-    def get_json(self):
-        pass
+    def execute(self):
+        self.var.to_file()
 
-    def to_file(self):
-        pass
+# evaluate the cross-section
+class distribution(Command):
+    def __init__(self, var: sigma):
+        self._var = sigma()
+    
+    def execute(self):
+        self._var.to_file()
 
-if (__name__ == "main"):
-    coresushi()
+# doing the renormlize
+class sushi_renormalize(Command):
+    def __init__(self, var: renschemes)
+        self._var = renschemes()
 
+    def execute(self):
+        self._var.to_file()
 
+if __name__ == "__main__":
+    ren = renschemes(inputs, einital, renormalizeSM, quarkhiggscoup, squarkhiggscoupCMSSM, renormalize)    
+
+    command1 = sushi_renormalize(ren)
+    
+    invoker = invoker()
+    invoker.register("ren", command1)
+
+    invoker.execute("ren")

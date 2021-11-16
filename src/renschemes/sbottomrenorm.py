@@ -4,11 +4,14 @@
 
 import sys
 
+#sys.path.insert(0, '/users/tp/dat/aggrenorm2/src/')
+
 from typing import Dict, List
 
 from init import *
 from consts import *
 from utils import *
+from interface import *
 
 from renschemes.Abrenorm import *
 

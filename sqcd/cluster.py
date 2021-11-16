@@ -50,10 +50,7 @@ def cluster_run(
     diagrams = [2,3,5,7,9,11,12,13,14,15]
     filename = 'D'+str(diagrams[index_in]) +'_'+ str(input_file) + '.csv'
     if (richardson==True):
-        #lams = [lam, 2*lam, 4*lam, 8*lam, 16*lam]
         lams = [2**ik*lam for ik in range(k)]
-        # save all of the different lam files into D3_richardson directory.
-        # save combined lam csv into working directory
         if not os.path.isfile(filename):
             for ilam in lams:
                 print(ilam)

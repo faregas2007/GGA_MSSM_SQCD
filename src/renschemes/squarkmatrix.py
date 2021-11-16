@@ -1,8 +1,9 @@
 # squarkmatrix.py
-# Find egienvalue of squark masses and mixing angles
+# Find egienvalues of squark masses and mixing angles
 
 import sys
 import numpy as np
+#sys.path.insert(0, '/users/tp/dat/aggrenorm2/src/common/')
 
 from typing import Dict, List
 
@@ -10,6 +11,7 @@ from typing import Dict, List
 from init import *
 from consts import *
 from utils import *
+from interface import *
 
 #from src import init, consts, utils
 

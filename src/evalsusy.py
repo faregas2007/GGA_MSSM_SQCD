@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-from include import *
+from interface import *
 from init import *
 
 # factory pattern --> will move into include.py/template.py 

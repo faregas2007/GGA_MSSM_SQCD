@@ -4,11 +4,9 @@
 
 import sys
 import logging
-
-
 from typing import Dict, List
 
-from include import *
+from interface import *
 from init import *
 from consts import *
 from config import *
@@ -27,11 +25,11 @@ from renschemes.squarkmatrix import *
 class renschemes:
     def __init__(self,
         inputs, 
-        einital, 
-        renormalizeSM, 
-        quarkhiggscoup, 
-        squarkhiggscoupCMSSM, 
-        renormalize):
+        einital: inputs, 
+        renormalizeSM: renorm, 
+        quarkhiggscoup: coupling, 
+        squarkhiggscoupCMSSM: coupling, 
+        renormalize: renorm):
         self._inputs = inputs()
         self._einital = einital().initial()
         self._renormalizeSM = renormalizeSM()
@@ -185,6 +183,7 @@ class renormalize(renorm, einital):
         c2thetab = sqmass['c2thetab']
         s2thetab = sqmass['s2thetab']
 
+        # reconstruct mbsb
         mbsb = s2thetab/((Ab -muSUSY*tanb))*(msb12-msb22)/2.0
         if(mbsb < 0.0):
             print('sbottom sector input is inconsistent!')
@@ -215,7 +214,7 @@ class renormalize(renorm, einital):
             sthetab = sthetab,
             mu=muD)
 
-        # chosen to be mbos--> should put as class input
+        # mb is chosen to be mbos--> should put as a class input
         mb = mbos
         mb2 = mb*mb
         mt2 = mt*mt

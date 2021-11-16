@@ -147,7 +147,7 @@ class einital(inputs):
 
         mh2 = Mh*Mh
         z = mh2/self.sqrtS**2
-        sigmanull = self.GF/288.0 * np.sqrt(2.0)/Pi * gev2pb
+        sigmanull = self.GF/288.0 / np.sqrt(2.0)/Pi * gev2pb
 
         if(self.distrb == 0):
             maxrap = -np.log(z)/2.0
@@ -158,7 +158,7 @@ class einital(inputs):
 
         lfh = np.log(muFggh**2/mh2)
         lrh = np.log(muRggh**2/mh2)
-        lfr = np.log(muFggh**2/muRggh)
+        lfr = np.log(muFggh**2/muRggh**2)
 
         if(self.norder == 0):
             pdfnamein = self.pdflo
@@ -171,7 +171,7 @@ class einital(inputs):
         apimur = runalphas(apimz, self.mZ, muRggh, nf, self.norder+1, size)
         alphasggh = apimur*Pi
 
-        mcos, mbos, mbMSbarmuR = getmass(alphasggh, muRggh, self.mZ, self.mcmc, self.mbmb)
+        mcos, mbos, mbMSbarmuR = getmass(self.alphasmz, muRggh, self.mZ, self.mcmc, self.mbmb)
         
         return {
             'Sind':Sind, 'lpseudo':lpseudo, 'lam':lam, 
@@ -183,7 +183,8 @@ class einital(inputs):
             'mcos':mcos, 'mbos':mbos, 'mbMSbarmuR':mbMSbarmuR,
             'alphasggh':alphasggh, 'mbrunloop':mbrunloop, 'mh2':mh2,
             'maxrap':maxrap, 'minrap':minrap, 'pseudorap':pseudorap, 
-            'ppcoll':ppcoll, 'norder':self.norder
+            'ppcoll':ppcoll, 'norder':self.norder, 'mgl':self.M3,
+            'mu':self.mu, 'tanb':self.tanb, 'mA':self.mA
         }
 
     def get_json(self):

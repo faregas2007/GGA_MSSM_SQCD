@@ -12,6 +12,7 @@ from argparse import Namespace
 
 from consts import *
 from runalphas import *
+from config import *
 
 def ifunc(a, b, c):
     return (a*b*np.log(a/b) + b*c*np.log(b/c) + a*c*np.log(c/a))/((a-b)*(b-c)*(a-c))
@@ -29,6 +30,7 @@ def alphasmzpdf(pdfnamein, mZ):
     return p.alphasQ(mZ)/Pi
 
 def polemasshm(mqmq, apimq, nloop):
+	# what is the point to put lmum here ? 
 	lmum = np.float(0.0)
 	mqpole = np.float(0.0)
 	if(nloop == 0):
@@ -133,25 +135,45 @@ def save_dict(d: Dict, filepath: str, cls=None, sortkeys: bool=False)->None:
 	with open(filepath, 'w') as fp:
 		json.dump(d, indent=2, fp=fp, cls=cls, sort_keys=sortkeys)
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description='gga_mssm_sqcd')
-    parser.add_argument('-id', '--index_in', type=lambda x: int(float(x)), metavar='', help='diagram index',)
-    parser.add_argument('-lam', '--lamb', type=lambda x: float(x), metavar='', help='lambda squark mass shifted',)
+def getdata(filename):
+	params = argparse.Namespace()
+	df = pd.read_csv(filename)
+	df2 = df[df['Squark']=='stop'].reset_index()
+	df3 = df[df['Squark']=='sbot'].reset_index()
+	
+	params.stop = df2['Squark']
+	params.sbot = df3['Squark']
+	params.tanb = df2['tanb']
+	params.mu = df2['mu']
+	params.tanb = df2['tanb']
+	params.mA = df2['MA']
 
-    parser.add_argument('-in', '--input', type=argparse.FileType('r'), metavar='INPUT_FILE', help='input directory',)
-    parser.add_argument('-amp', '--amp_dir', type=dir_path, metavar='AMP_DIR', help='amplitude directory',)
+	params.timet = df2['TIME']
+	params.lamt = df2['lam']
+	params.epst = df2['eps']
+	params.reCt = df2['ReFinAvg']
+	params.reCterr = df2['ReFinErr']
+	params.imCt = df2['ImFinAvg']
+	params.imCterr = df2['ImFinErr']
+	params.mst1 = df2['msq1']
+	params.mst2 = df2['msq2']
+	params.At = df2['Aq']
+	params.alphaqst = df2['alphaqs']
+	
+	params.timeb = df3['TIME']
+	params.lamb = df3['lam']
+	params.epsb = df3['eps']
+	params.reCb = df3['ReFinAvg']
+	params.reCberr = df3['ReFinErr']
+	params.imCb = df3['ImFinAvg']
+	params.imCberr = df3['ImFinErr']
+	params.msb1 = df3['msq1']
+	params.msb2 = df3['msq2']
+	params.Ab = df3['Aq']
+	params.alphaqsb = df3['alphaqs']
+	return params
 
-    return parser.parse_args()
-
-def dir_path(path):
-    if os.path.isdir(path):
-        return path
-    else:
-        raise argparse.ArgumentDefaultsHelpFormatter(f'readable_dir:{path} is not a valid path')
-
-
-def combined_csv(allfiles, filename):
-    combined = pd.concat([pd.read_csv(f) for f in allfiles])
-    result = combined.sort_values(by=['lam'], ascending=True)
-    result.to_csv(filename, index=False, encoding='utf-8-sig')
-    return 0
+"""
+params = getdata(Path(data_dir, 'CSQCD.csv'))
+print(params)
+"""

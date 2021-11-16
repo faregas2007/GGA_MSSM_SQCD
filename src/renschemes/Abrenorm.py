@@ -10,6 +10,7 @@ from typing import Dict, List
 from init import *
 from consts import *
 from utils import *
+from interface import *
 
 class Abrenorm(einital):
 

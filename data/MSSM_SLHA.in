@@ -42,10 +42,10 @@ Block DISTRIB
 				# 2 = Abs[y] > ymin, 3 = ymin < Abs[y] < ymax
 	31	0.5		# minimal rapidity ymin
 	32	1.5		# maximal rapidity ymax
-	4	1		# 0 = rapidity, 1 pesudorapidity
+	4	0		# 0 = rapidity, 1 pesudorapidity
 Block SCALES
-	1	2.0029460059806268	# renormalizaation scale muR/mh for ggh/murggh
-	2	2.0029460059806268	# factorization scale muF/mh
+	1	2.00	# renormalizaation scale muR/mh for ggh/murggh
+	2	2.00	# factorization scale muF/mh
 Block RENORMBOT
 	1	0	# mb_in_bottom_Yukawa: 0=OS, 1=MSbarmb, 2=MSbarmuR
 	2	0	# tanbeta_res_of_Yb: 0=no, 1=navie, 2=full
@@ -59,10 +59,10 @@ Block PDFSPEC
 	3	MMHT2014nnlo68cl	# name of pdf (nnlo)
 Block VEGAS
 	1	10	# Iterations
-	2	300	# nstart
-	3	1000	# nend
+	2	5e1	# nstart
+	3	1e2	# nend
 	4	0.4	# alpha_vegas
-	5	1e-8	# tol_eps
+	5	1e-10	# tol_eps
 	6	Cuhre	# integrator
 Block IBPARA
 	1	0.0001	# lam shift
@@ -73,3 +73,5 @@ Block FACTOR
 	3	1.0000000000000	# b
 	4	1.0000000000000	# st
 	5	1.0000000000000	# sb
+Block Micheal
+	1	1	#1 = True, 2= False

@@ -1,12 +1,10 @@
+# M2slha.py
+#To convert the input from Micheal format into slha format.
+#To include the coversion from At to Ab in diagrams with squark Higgs coupling
+
 import sys
 import os.path
-import numpy as np
-
-
-"""
-To convert the input from Micheal format into slha format.
-To include the coversion from At to Ab in diagrams with squark Higgs coupling    
-"""
+import numpy as np    
 
 name = sys.argv[1]
 output = name+".in"

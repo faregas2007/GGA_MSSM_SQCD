@@ -14,7 +14,6 @@ logs_dir = Path(base_dir, 'logs')
 test_dir = Path(base_dir, 'tests')
 xs_dir = Path(src_dir, 'xs')
 rens_dir = Path(src_dir, 'renschemes')
-amp_dir = Path(base_dir, 'amp')
 # create dir
 config_dir.mkdir(parents=True, exist_ok=True)
 src_dir.mkdir(parents=True, exist_ok=True)
@@ -25,7 +24,7 @@ logs_dir.mkdir(parents=True, exist_ok=True)
 test_dir.mkdir(parents=True, exist_ok=True)
 xs_dir.mkdir(parents=True, exist_ok=True)
 rens_dir.mkdir(parents=True, exist_ok=True)
-amp_dir.mkdir(parents=True, exist_ok=True)
+
 
 class CustomFilter(logging.Filter):
 
