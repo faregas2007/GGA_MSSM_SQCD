@@ -1,0 +1,32 @@
+Block QCD
+	1	0.081414850586	#alphaqs
+Block REAL
+	1	1000.000000000000	#mu
+	2	18236.610148834494	#Aq
+	3	1.545801533176	#beta
+	4	0	#squark mixing
+	5	0.659068813143	#sintheta
+	6	0.752082641431	#costheta
+	7	4.908171412605	#correction_to_A_squark_coupling
+	8	1795396.020721989917	#gq12_coupling
+Block INTEGER
+	1	2	#stop_1_sbot_2
+Block MASS
+	1	2400.000000000000	#mA
+	2	4.915765932164	#mQ
+	3	4.915765932164	#mQQQ
+	4	2500.000000000000	#mG
+	5	1458.957958811900	#msq1
+	6	1531.141109268950	#msq2
+Block VEGAS
+	1	30	#iter
+	2	100000	#stardiv
+	3	300000	#enddiv
+	4	3000000	#starfin
+	5	90000000	#endfin
+	6	0.5	#alpha
+	7	1000	#increase
+	8	Cuhre	#integrator
+Block IBPPARA
+	1	0.0001	#lambda
+	2	0.000000001	#epsilon

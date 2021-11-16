@@ -1,0 +1,77 @@
+Block SUSHI
+	1	1	#model: 0 = SM, 1 = MSSM, 2 = 2HDM, 3=NMSSM
+	2	21	# 11 = h, 12= H, 21 = A
+	3	1	# collider: 0 = p-p, 1=p-pbar
+	4	14000.0	# center of mass energy in Ge
+	5	1	#order ggh	0=LO, 1=NLO
+Block SMINPUTS
+	1	1.27934000e+02	# alpha_em_MZ_SM_MSBAR
+	2	1.16637000e-05	# G_fermi
+	3	1.17200000e-01	# alphas_MZ_SM_MSBAR
+	4	9.11876000e+01	# m_Z_pole
+	5	8.04345516e+01	# m_W	
+	6	4.18000000e+00	# m_b_m_b
+	7	4.90458944e+00	# m_b_pole
+	8	1.73300000e+02	# m_t_pole
+	9	1.27500000e+00	# m_c_m_c
+Block MINPAR
+	1	10000	# running_point_in_odein_alphas
+	3	40.0	# tanb
+Block EXTPAR
+	3	2500.0000000000000	# M_3
+	11	2349.86643595137	# A_t
+	12	3346.51588337224	# A_b
+	23	1000.0000000000000	# mu
+	43	1400.0287351195495	# M_Q3
+	46	1593.7130881085868	# M_TR
+	49	1500.1131498622922	# M_BR
+Block ALPHA
+	1	-8.3691204e-01	# mixing in Higgs sector
+Block MASS
+	1	125.0	# Higgs_mass_h
+	2	149.1133000000000	# Higgs_mass_H
+	3	200.0000000000000	# Pesudoscalar_Higgs_mass
+Block DISTRIB
+	1	0	# distribution: 0 = sigma_total, 1 = dsigma/dpt
+			#				2 = dsigma/dy, 3 = d^2sigma/dy/dpt
+	2	0	# pt-cut: 0 = no, 1 = pt > ptmin, 2 = pt < ptmax
+			#		 3 = ptmin < pt < ptmax			
+	21	30.0	# minimal pt-value ptmin in GeV
+	22	100.0	# maximal pt-value ptmax in GeV
+	3	0		# rapidity-cut: 0 = no, 1 = Abs[y] < ymax
+				# 2 = Abs[y] > ymin, 3 = ymin < Abs[y] < ymax
+	31	0.5		# minimal rapidity ymin
+	32	1.5		# maximal rapidity ymax
+	4	0		# 0 = rapidity, 1 pesudorapidity
+Block SCALES
+	1	2.00	# renormalizaation scale muR/mh for ggh/murggh
+	2	2.00	# factorization scale muF/mh
+Block RENORMBOT
+	1	0	# mb_in_bottom_Yukawa: 0=OS, 1=MSbarmb, 2=MSbarmuR
+	2	0	# tanbeta_res_of_Yb: 0=no, 1=navie, 2=full
+Block RENORMSBOT
+	1	2	# mb: 0=OS, 1=DRbar, 2=dep; recommended: 2 
+	2	0	# Ab: 0=OS, 1=DRbar, 2=dep; recommended: 0
+	3	0	# thetab: 0=OS, 1=DRbar; recommended: 0
+Block PDFSPEC
+	1	MMHT2014lo68cl	# name of pdf (lo)
+	2	MMHT2014nlo68cl	# name of pdf (nlo)
+	3	MMHT2014nnlo68cl	# name of pdf (nnlo)
+Block VEGAS
+	1	10	# Iterations
+	2	5e1	# nstart
+	3	1e2	# nend
+	4	0.4	# alpha_vegas
+	5	1e-10	# tol_eps
+	6	Cuhre	# integrator
+Block IBPARA
+	1	0.0001	# lam shift
+	2	1e-8	# cut in integration limit
+Block FACTOR
+	1	0.0000000000000	# factor_for_yukawa_coupling_c
+	2	1.0000000000000	# t
+	3	1.0000000000000	# b
+	4	1.0000000000000	# st
+	5	1.0000000000000	# sb
+Block Micheal
+	1	1	#1 = True, 2= False
