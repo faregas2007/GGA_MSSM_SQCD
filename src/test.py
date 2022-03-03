@@ -61,7 +61,7 @@ from renschemes.renschemes import *
 print(f'renormalize: {renormalize().get_json()}')
 print(f'renormalizeSM: {renormalizeSM().get_json()}')
 #print(f'renschemes: {renschemes(inputs, einital, renormalizeSM, quarkhiggscoup, squarkhiggscoupCMSSM, renormalize).get_params()}')
-print(f'renschemes: {renschemes(inputs, einital, renormalizeSM, quarkhiggscoup, squarkhiggscoupCMSSM, renormalize).to_file()}')
+print(f'renschemes: {renschemes(inputs, einital, renormalizeSM, quarkhiggscoup, squarkhiggscoupCMSSM, renormalizetest).to_file()}')
 
 """
 from xs.reals import *

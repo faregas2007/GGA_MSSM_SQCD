@@ -1,9 +1,8 @@
-# each qcd part will render the sqcd part which is an array typed data.
-# submit will only submit the qcd ones. 
-# for multiple inputfiles, only qcd ones are submit to cluster
-# the return values will then be added to the corresponding sqcd part. 
+# each qcd part will render the sqcd part. Since the qcd part only depends on quarks and higgs masses.
+# submit only sqcd parts
+# for multiple inputfiles, only qcd parts are needed to submit to cluste 
 
-# for now, to save time, do it manually. 
+# for now, do it manually. Generate input--> csqcd--> xs 
 
 def submit(
     jobname: str: params.sushi_input,

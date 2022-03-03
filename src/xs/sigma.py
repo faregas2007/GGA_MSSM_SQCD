@@ -230,3 +230,10 @@ class sigma_sqcd:
             logger.info(f'alphasggh, delta, sigmaLO, errorLO, sigmaNLO, errorNLO: {alphasggh, delta, sigma0, error0, sigma1, error1}')
             logger.info(f'xs sqcd evaluation ends ...')
             return {'norder': norder, 'sigmaLO': sigma0, 'errorLO': error0, 'sigmaNLO': sigma1, 'errorNLO':error1}
+
+    def get_json(self)->Dict:
+        return json.dumps(self.xs(), cls=NumpyEncoder, indent=4)
+
+    def to_file(self):
+            return save_dict(self.xs(), Path(model_dir, 'xs.json'), cls=NumpyEncoder)
+

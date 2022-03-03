@@ -25,7 +25,9 @@ class sbottomrenorm(einital):
         cthetab: float=0.0, 
         mu_in: float=einital().initial()['muRggh'],
         mgl: float=inputs().MQ3,
-        mb: float= einital().initial()['mbos'])->Dict:
+        mb: float= einital().initial()['mbos'],
+        smflag: bool=True,
+        drflag: bool=True)->Dict:
         """
         The inputs could varied, LO-values or corrected parameters.
         Keep them seperate from inptus and einitial parameters.
@@ -49,7 +51,7 @@ class sbottomrenorm(einital):
         dmsb11 = self.dmsb1osfin(mb2=mb2,mgl=mgl,msb12=msb12,msb22=msb22,sthetab=sthetab,cthetab=cthetab,mu_in=mu_in)/msbot1
         dmsb21 = self.dmsb2osfin(mb2=mb2,mgl=mgl,msb12=msb12,msb22=msb22,sthetab=sthetab,cthetab=cthetab,mu_in=mu_in)/msbot2
         dthetab1 = self.dthetabosfin(mb2=mb2,mgl=mgl,msb12=msb12,msb22=msb22,s2thetab=s2thetab,c2thetab=c2thetab,mu_in=mu_in)
-        dhbhb2 = self.dmbfin(True,True, mb=mbsb,mgl=mgl,msb12=msb12,msb22=msb22,s2thetab=s2thetab,mu_in=mu_in)
+        dhbhb2 = self.dmbfin(smflag=smflag,drflag=drflag, mb=mbsb,mgl=mgl,msb12=msb12,msb22=msb22,s2thetab=s2thetab,mu_in=mu_in)
 
         return {'dmsb11':dmsb11, 'dmsb12':dmsb12, 'dmsb21':dmsb21, 'dmsb22':dmsb22, 'dthetab1':dthetab1,'dthetab2':dthetab2, 'dhbhb1':dhbhb1, 'dhbhb2':dhbhb2, 'dhbhb3':dhbhb3}
 
@@ -167,15 +169,15 @@ class sbottomrenorm(einital):
         return dthetabosfin
     
     # should belongs to mbrenorm --> todo.
-    def dmbfin(self,
-        smflag: bool=True, 
-        drflag: bool=False, 
+    def dmbfin(self, 
         mb: float= einital().initial()['mbos'],
         mgl:float=inputs().M3,
         msb12:float=1.0,
         msb22:float=1.5,
         s2thetab:float=0.0, 
-        mu_in: float=1000.0)->float:
+        mu_in: float=1000.0,
+        smflag: bool=True,
+        drflag: bool=True)->float:
 
         mb2 = mb*mb
         if (mb2 != 0.0):
@@ -273,6 +275,57 @@ class sbottomrenorm(einital):
                 mbsb_var1 = mbsb_var1 - ((msb12-msb22)*(np.sin(beta)*np.cos(beta)))/muSUSY*dthetabos1*prefac
         
         return mbsb_var1
+
+    def dmbdep(self,
+        Ab: float=inputs().Ab,
+        mu: float=inputs().mu,
+        tanb: float=inputs().tanb,
+        msb12: float=0.0,
+        msb22: float=0.0,
+        sthetab: float=0.0,
+        cthetab: float=0.0,
+        dthetab: float=0.0,
+        dmsb1_1: float=0.0,
+        dmsb2_1: float=0.0
+        )->float:
+
+        beta = np.arctan(tanb)
+        sbeta = np.sin(beta)
+        cbeta = np.cos(beta)
+        s2thetab = 2*sthetab*cthetab
+        c2thetab = cthetab**2 - sthetab**2
+
+        dmbdep = -(Ab - mu*tanb)*(sbeta*cbeta/mu)*((c2thetab/s2thetab)*dthetab + (dmsb1_1 - dmsb2_1)/(msb12-msb22))
+        return dmbdep
+
+
+    def dmbdep2(self, 
+        Ab: float=inputs().Ab,
+        mu: float=inputs().mu,
+        tanb: float=inputs().tanb,
+        mb: float= einital().initial()['mbos'],
+        msb12: float=0.0,
+        msb22: float=0.0,
+        sthetab: float=0.0,
+        cthetab: float=0.0,
+        dthetab: float=0.0,
+        dmsb12: float=0.0,
+        dmsb22: float=0.0,
+        dAb:float=0.0
+        )->float:
+
+        c2thetab = cthetab**2 - sthetab**2
+        s2thetab = 2*sthetab*cthetab
+        dmbdep = 2*mb*(c2thetab/s2thetab)*dthetab - 2*mb*mb*dAb/(s2thetab*(msb12 - msb22)) + mb*(dmsb12-dmsb22)/(msb12 - msb22)
+        return dmbdep
+
+    def get_json(self, obj: str='sbottomrenormHM')->Dict:
+        if(obj=='sbottomrenormDS'):
+            return json.dumps(self.sbottomrenormDS(), cls=NumpyEncoder, indent=4)
+        elif(obj=='sbottomrenormHM'):
+            return json.dumps(self.sbottomrenormHM(), cls=NumpyEncoder, indent=4)
+ 
+
 
     def get_json(self, obj: str='sbottomrenormHM')->Dict:
         if(obj=='sbottomrenormDS'):

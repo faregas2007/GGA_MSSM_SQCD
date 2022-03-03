@@ -29,13 +29,16 @@ class renschemes:
         renormalizeSM: renorm, 
         quarkhiggscoup: coupling, 
         squarkhiggscoupCMSSM: coupling, 
-        renormalize: renorm):
+        renormalizetest: renorm,
+        #renormalize: renorm
+        ):
         self._inputs = inputs()
         self._einital = einital().initial()
         self._renormalizeSM = renormalizeSM()
         self._quarkhiggscoup = quarkhiggscoup()
         self._squarkhiggscoupCMSSM = squarkhiggscoupCMSSM()
         self._renormalize = renormalize()
+        self._renormalizetest = renormalizetest()
 
     def get_params(self)->Dict:
         logger.info('renscheme starts ...')
@@ -47,7 +50,8 @@ class renschemes:
         temp.update(temp0)
         
         # hard copy into logs, printing each stages of computations.
-        temp0 = self._renormalize.get_params()
+        #temp0 = self._renormalize.get_params()
+        temp0 = self._renormalizetest.get_params()
         temp.update(temp0)
         logger.info(f'renormalize params: {temp0}')
 
@@ -462,3 +466,322 @@ class renormalize(renorm, einital):
 test = renormalize()
 print(test.get_json())
 """
+
+class renormalizetest(renorm, einital):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.cinit = super().initial() 
+        self.mbos = self.cinit['mbos']
+    
+        self.alphasggh = self.cinit['alphasggh'] 
+        self.mbmsbarmur = self.cinit['mbMSbarmuR'] 
+        self.mbrunloop = self.cinit['mbrunloop']
+
+    def get_params(self, muD: float=1500.0)->dict:
+        M3SU = inputs().MQ3
+        M3SQ = inputs().MTR
+        M3SD = inputs().MBR
+
+        tanbresum = self.tanbresum
+
+        Ab = self.Ab
+        At = self.At
+        # test
+        Abtree = Ab
+        Attree = At
+
+        alphasmz = self.alphasmz         
+        tanb = self.tanb
+        muSUSY = self.mu
+
+        mt = self.mt
+        mb = self.mbos
+        mbmb = self.mbmb
+        mbos = self.mbos
+
+        mgl = self.M3
+        mZ = self.mZ
+        mW = self.mW
+
+        beta = np.arctan(self.tanb)
+
+        # mb-dep extension
+        # sushi negative cthetab, cthetat --> mbsb increases with tanb
+        # Micheal positive cthetab, cthetat --> mbsb decreases with tanb. 
+        sqmass = squarkmatrix().calcsquarkmass(mb=mbmb, dMLb=0.0)
+        msb12 = sqmass['msb12'] 
+        msb22 = sqmass['msb22']
+        mst12 = sqmass['mst12']
+        mst22 = sqmass['mst22']
+
+        cthetat = sqmass['cthetat']
+        sthetat = sqmass['sthetat']
+        cthetab = sqmass['cthetab']
+        sthetab = sqmass['sthetab']
+
+        c2thetat = sqmass['c2thetat']
+        s2thetat = sqmass['s2thetat']
+        c2thetab = sqmass['c2thetab']
+        s2thetab = sqmass['s2thetab']
+        print(f's2thetab:{s2thetab}')        
+        mbsb = s2thetab/((Ab - muSUSY*tanb))*(msb12 -msb22)/2.0
+        mbMSbarmuD = mbrenorm().mbMSbarmuX(mu_in=muD)
+        alphasren = SUSHI_alphas(alphasmz, rmurl=muD, mZ=mZ)
+        
+        # mb-> mbmb.
+        #mb = mbmb
+        mb = mbmb
+        mb2 = mb*mb
+        mt2 = mt*mt 
+        mgl2 = mgl*mgl
+        muD2 = muD*muD
+
+        # MSbar (smflag=True, drflag=False)
+        # DRbar (smflag=True, drflag=True)
+        counterterms = sbottomrenorm().sbottomrenormHM(
+            mbsb = mbsb,
+            msb12 = msb12,
+            msb22 = msb22,
+            sthetab = sthetab,
+            cthetab = cthetab,
+            mu_in = muD,
+            mgl = mgl,
+            mb = mbos, # mbos
+            smflag=True,
+            drflag=False
+        )
+    
+        dmsb1os = counterterms['dmsb11']
+        dmsb2os = counterterms['dmsb21']
+        dthetabstd = counterterms['dthetab1']
+        dmb = counterterms['dhbhb2']        
+
+        dAb = Abrenorm().dAbos(
+            msb12=msb12,
+            msb22=msb22,
+            sthetab=sthetab,
+            cthetab=cthetab,
+            dmsb1_1=dmsb1os,
+            dmsb2_1=dmsb2os,
+            dthetab=dthetabstd,
+            mu_in=muD,
+            beta=beta,
+            mb=mbos,
+            mgl=mgl,
+            Ab = Abtree,
+            muSUSY=muSUSY
+        ) 
+        """
+        dmbsb = sbottomrenorm().dmbdep(
+            Ab = Ab, 
+            mu = muSUSY,
+            msb12 = msb12,
+            msb22 = msb22,
+            sthetab = sthetab,
+            cthetab = cthetab,
+            dthetab = dthetabstd, 
+            dmsb1_1 = dmsb1os,
+            dmsb2_1= dmsb2os
+        ) 
+        """
+         
+        dmbsb = sbottomrenorm().dmbdep2(
+            Ab = Ab, 
+            mu = muSUSY,
+            tanb = tanb,
+            mb = mbos, 
+            msb12 = msb12,
+            msb22 = msb22,
+            sthetab = sthetab,
+            cthetab = cthetab,
+            dthetab = dthetabstd, 
+            dmsb12 = dmsb1os,
+            dmsb22= dmsb2os,
+            dAb = dAb
+        )        
+       
+        thetab = np.arcsin(sthetab)
+        prefac = SUSHI_alphas(alphasmz, muD, mZ)/Pi
+        mbsb = mbMSbarmuD + prefac*(-dmbsb + dmb)
+        #Ab = Ab + prefac*dAb 
+        print(f"alphas:{prefac*Pi}")
+        print(f'mbsb:{mbsb}')
+        #print(f'Ab, dAb: {Ab}, {dAb}')
+        print(f'thetab:{thetab}')
+
+        dMLb = (alphasren/Pi)*squarkmatrix().deltaML(
+            mstop1 = np.sqrt(mst12) ,
+            mstop2 = np.sqrt(mst22),
+            cthetat = cthetat,
+            sthetat = sthetat,
+            msb1 = np.sqrt(msb12),
+            msb2 = np.sqrt(msb22),
+            cthetab = cthetab,
+            sthetab = sthetab,
+            mu = muD,
+            mtop = mt,
+            mb = mbos, # mbmb, mbos
+            mgluino = mgl)
+        
+        sqmass = squarkmatrix().calcsquarkmass(
+            M3SU = M3SU,
+            M3SQ = M3SQ,
+            M3SD = M3SD,
+            mw = mW,
+            mz = mZ,
+            mt = mt,
+            mb = mbsb, # mbos
+            muSUSY = muSUSY,
+            beta = beta,
+            At = At, 
+            Ab = Abtree, 
+            dMLb = dMLb
+        )
+
+        msb12 = sqmass['msb12'] 
+        msb22 = sqmass['msb22']
+        mst12 = sqmass['mst12']
+        mst22 = sqmass['mst22']
+
+        cthetat = sqmass['cthetat']
+        sthetat = sqmass['sthetat']
+        cthetab = sqmass['cthetab']
+        sthetab = sqmass['sthetab']
+
+        c2thetat = sqmass['c2thetat']
+        s2thetat = sqmass['s2thetat']
+        c2thetab = sqmass['c2thetab']
+        s2thetab = sqmass['s2thetab']
+        print(f's2thetab_2:{s2thetab}')
+        thetabos = np.arcsin(sthetab)
+        thetatos = np.arcsin(sthetat)
+
+        # recalculate counter-terms with OS-values. 
+        counterterms = sbottomrenorm().sbottomrenormHM(
+            mbsb = mbsb,
+            msb12 = msb12,
+            msb22 = msb22,
+            sthetab = sthetab,
+            cthetab = cthetab,
+            mu_in = muD,
+            mgl = mgl,
+            mb = mbos,
+            smflag = True,
+            drflag = False
+        )  
+
+        dmsb11 = counterterms['dmsb11']
+        dmsb21 = counterterms['dmsb21']
+        dthetabos = counterterms['dthetab1']
+        dmb = counterterms['dhbhb2'] 
+        
+        dAb = Abrenorm().dAbos(
+            msb12=msb12,
+            msb22=msb22,
+            sthetab=sthetab,
+            cthetab=cthetab,
+            dmsb1_1=dmsb1os,
+            dmsb2_1=dmsb2os,
+            dthetab=dthetabos,
+            mu_in=muD,
+            beta=beta,
+            mb=mbos,
+            mgl=mgl,
+            Ab=Abtree,
+            muSUSY=muSUSY
+        )
+
+        print(f'Ab, dAb:{Ab}, {dAb}')
+        
+        """
+        dmbsb = sbottomrenorm().dmbdep(
+            Ab = Ab, 
+            mu = muSUSY,
+            msb12 = msb12,
+            msb22 = msb22,
+            sthetab = sthetab,
+            cthetab = cthetab,
+            dthetab = dthetabos, 
+            dmsb1_1 = dmsb1os,
+            dmsb2_1= dmsb2os
+        )
+        """
+                
+        dmbsb = sbottomrenorm().dmbdep2(
+            Ab = Ab, 
+            mu = muSUSY,
+            tanb = tanb,
+            mb = mbos, 
+            msb12 = msb12,
+            msb22 = msb22,
+            sthetab = sthetab,
+            cthetab = cthetab,
+            dthetab = dthetabos, 
+            dmsb12 = dmsb1os,
+            dmsb22= dmsb2os,
+            dAb=dAb
+        )        
+        
+        # mbsb != 1.8
+        # fixed Ab
+        thetab = np.arcsin(sthetab)
+        mbsb = mbMSbarmuD + prefac*(-dmbsb + dmb)
+        Abstd = Abtree
+        #Abstd = Ab + prefac*dAb
+        #thetabos = thetabos + prefac*dthetabos
+
+        print(f'mbsb:{mbsb}')
+        print(f'thetab:{thetab}')
+        print(f'Ab:{Abstd}')
+
+        # yukawa bottom quark
+        mbyuk = mbos
+        mb = mbos
+        dgb = 0.0
+        dmb = np.array([0.0,0.0,0.0])
+
+        if(tanbresum == 1):
+            gb = self.yukfac[2]/(1.0 + delmb)
+        elif(tanbresum == 2):
+            gb = self.yukfac[2]*(1.0 - (1.0/tanb**2)*delmb - Amx[Sind, 2]*vev/(Amx[Sind,1]*vevS*tanb)*delmb)*(1.0/(1.0+delmb))
+        else:
+            gb = self.yukfac[2]  
+ 
+        return {
+            'mt':mt,
+            'mb': mb,
+            'mbsb': mbsb,
+            'mbos':mbos,
+            'mbMSbarmuD':mbMSbarmuD,
+
+            'msb12':msb12,
+            'msb22':msb22,
+            'mst12':mst12,
+            'mst22':mst22,
+        
+            'Abtree':Abtree,
+            'Ab':Abstd,
+            'Attree':Attree,
+            'At':At,
+
+            'thetabos':thetabos,
+            'thetatos':thetatos,
+            'sthetab':sthetab,
+            'cthetab':cthetab,
+            'sthetat':sthetat,
+            'cthetat':cthetat,
+           
+            's2thetab':s2thetab,
+            'c2thetab':c2thetab,
+            's2thetat':s2thetat,
+            'c2thetat':c2thetat,
+
+            'tanbeta':tanb,
+            'mbyuk':mbyuk,
+            'dgb':dgb,
+            'dmb':dmb
+                }
+
+    def get_json(self):
+        return json.dumps(self.get_params(), cls=NumpyEncoder, indent=4)
+ 

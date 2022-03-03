@@ -16,7 +16,7 @@ Block SMINPUTS
 	9	1.27500000e+00	# m_c_m_c
 Block MINPAR
 	1	10000	# running_point_in_odein_alphas
-	3	40.0	# tanb
+	3	10.0	# tanb
 Block EXTPAR
 	3	2500.0000000000000	# M_3
 	11	2349.86643595137	# A_t

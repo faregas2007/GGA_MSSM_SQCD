@@ -5,6 +5,7 @@ from typing import Dict, List
 from pathlib import Path
 from argparse import Namespace
 
+from init import *
 from utils import *
 from config import *
 
@@ -34,9 +35,9 @@ class real_amps(renschemes):
         """
         self.mc = params.mcos
         self.mb = params.mb
-        self.mt = params.mt
+        self.mt = param.mt
         self.mh2 = params.mh2
-
+        
         self.gc = params.gc
         self.gb = params.gb
         self.gt = params.gt

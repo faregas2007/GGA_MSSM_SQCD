@@ -1,4 +1,5 @@
 # cluster.py
+# get rid off Richardson extrapolation part
 import subprocess as sps
 import os, sys, time, csv
 import pandas as pd

@@ -424,7 +424,7 @@ class gg(integrators):
         chi2 = np.array([0.0,0.0,0.0])
         virts_qcd = virtual().c_virts()
         virts_sqcd, e_virts_sqcd = virtual().c_virts_sqcd(alphas=alphasggh)
-
+        
         delta, error[0], chi2[0] = self.integrate(ndim=1, integrand=self.ggdelta)
         sub, error[2], chi2[2] = self.integrate(ndim=2, integrand=self.ggsub)
         hard, error[1], chi2[1] = self.integrate(ndim=3, integrand=self.ggreal)
