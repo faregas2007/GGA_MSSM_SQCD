@@ -231,6 +231,9 @@ class sigma_sqcd:
             logger.info(f'xs sqcd evaluation ends ...')
             return {'norder': norder, 'sigmaLO': sigma0, 'errorLO': error0, 'sigmaNLO': sigma1, 'errorNLO':error1}
 
+    def __call__(self)->Dict:
+        return self.xs()
+            
     def get_json(self)->Dict:
         return json.dumps(self.xs(), cls=NumpyEncoder, indent=4)
 

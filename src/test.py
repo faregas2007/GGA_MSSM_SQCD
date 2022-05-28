@@ -134,10 +134,10 @@ print(f'gginteg:{gginteg_batch().gginteg()}')
 end = timer()
 """
 
-"""
+
 from xs.sigma import *
-print(f'sigma: {sigma(qqinteg_batch, qginteg_batch, gginteg_batch).get_json()}')
-"""
+print(f'sigma: {sigma_sqcd(qqinteg, qginteg, gginteg).__call__()}')
+
 
 end = timer()
 print(f'{end - start}s')

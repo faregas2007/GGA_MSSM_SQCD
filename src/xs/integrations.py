@@ -493,7 +493,7 @@ class ggbatch(integrators, vegas.BatchIntegrand):
         return (s**2 + s*(t+ u) + (t+u)**2)**2/(s*u*(t+u)*(s+t+u))
 
     # real correction gg channel (finite terms) --> batch modifiying 
-    # potential bugs --> got a differs result with non-batch version.
+    # potential bugs --> got difference result with the non-batch version.
     def realggint(self, x,s,t,u,x1,x2,pt,y):
         ids = np.where(t>=0.0)
         t[ids] = -s[ids] * 1e-16

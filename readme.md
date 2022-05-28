@@ -18,13 +18,27 @@ Added summaryfile.csv file for CSQCD factor normalized to LO factor.
 
 # Install:
 
+For lhapdf,
+
+https://lhapdf.hepforge.org/install.html
+
+lhapdf install 'pdfsets'. 
+
 For pylooptools, 
 
-python3 setup.py install
+python3 setup.py install or pip3 install . 
 
 In ltools.py, DLL_NAME is replaced with a path to looptools.so. To test,
 
 python3 -m import "from pylooptools.ltools import *"
+
+
+# Test
+
+For renromalize,
+
+python3 test.py
+
 
 # External package:
 
