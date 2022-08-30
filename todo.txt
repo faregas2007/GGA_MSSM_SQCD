@@ -3,3 +3,24 @@ cluster runs for new scheme --> CSQCD.csv
 xs, Kfactor, Cfactor,
 
 
+git push using ssh without username and password
+
+ssh-keygen -t rsa -b 4096 -C "github-rsa"
+
+chmod +x id_rsa.pub key
+eval "$(ssh-agent -S)"
+
+# add private key
+ssh-add ~/.ssh/id_rsa
+
+# copy public key to github key
+Test
+ssh -vT git@github.com
+
+# Then clone, push, pull normally with git without username and password
+git add .
+git commit -m "blalbalbalba"
+git push 
+
+
+
